@@ -1,3 +1,4 @@
+'use strict';
 /* Pig Latin  Pig Latin takes the first consonant (or consonant cluster) of an English word, moves it to the end of the word and suffixes an "ay".
 
                 If a word begins with a vowel you just add "way" to the end.
@@ -19,11 +20,38 @@ function translatePigLatin(str) {
   return newStr;
 }
 
-console.log(translatePigLatin("consonant"));
-console.log(translatePigLatin("paragraphs"));
-console.log(translatePigLatin("glove"));
-console.log(translatePigLatin("algorithm"));
-console.log(translatePigLatin("ddqd"));
+console.log(translatePigLatin("Array"));
+
+function  AdvancedPigLatin(str) {
+    function check(obj) {
+        return ['a','i','u','e','o'].indexOf(str.charAt(obj)) == -1 ? check(obj + 1) : obj;
+    }
+    return str.substring(check(0)).concat((check(0) === 0 ? 'w' : str.substring(0,check(0))) + 'ay');
+}
+
+console.log(AdvancedPigLatin("consonant"));
+
+/* MY solution*/
+
+function myPigLatin(str) {
+    let strArr = [];
+    let tmp;
+    function  isConsonant(char) {
+        return /[^aeiou]/.test(char);
+    }
+
+    if(!isConsonant(str.charAt(0))) {
+        return str + " way";
+    } else {
+        strArr = str.split("");
+    }
+    while (isConsonant(strArr[0]) && !isConsonant(str)) {
+        tmp = strArr.shift();
+        strArr.push(tmp);
+    }
+    return strArr.join("") + "ay";
+}
+console.log(myPigLatin("ddqd"));
 /* ------------------------------------------------------------------------------------------------------------------- */
 
 /* Promise.All native implementation */
@@ -56,9 +84,9 @@ function  soon(val) {
  });
 
 Promise_All([soon(1), Promise.reject("X"),soon(3)]).then(array => {
-    console.log("Wrong path");
+    console.log("Wrong path", array);
 }).catch(error => {
     if (error !== "X") console.log("fail: ", error);
-})
+});
 
 /* ------------------------------------------------------------------------------------------------------------------- */
