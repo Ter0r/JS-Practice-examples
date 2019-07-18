@@ -55,10 +55,10 @@ function  soon(val) {
      console.log((array));
  });
 
-Promise_All([soon(1), Promise(reject("X")),soon(3)]).then(array => {
+Promise_All([soon(1), Promise.reject("X"),soon(3)]).then(array => {
     console.log("Wrong path");
 }).catch(error => {
-    if (error != "X");
+    if (error !== "X") console.log("fail: ", error);
 })
 
 /* ------------------------------------------------------------------------------------------------------------------- */
