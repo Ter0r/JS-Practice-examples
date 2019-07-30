@@ -54,3 +54,5 @@ document.addEventListener('keypress', (e) => {
         AddNote();
     }
 });
+
+document.body.querySelector("#button-addon").addEventListener("click", AddNote);
