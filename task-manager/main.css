@@ -1,0 +1,41 @@
+.col-md-5 {
+    background: antiquewhite;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input-group {
+    margin-top: 20px;
+}
+.form-control {
+    width: 18vw;
+}
+.row {
+    margin-top: 10vh;
+}
+.note {
+    pointer-events: none;
+}
+
+.note:before {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: 400;
+    content: "\f040";
+    float: left;
+    margin-left: -35px;
+    -webkit-font-smoothing: antialiased;
+    color: #aaa;
+    opacity: 50%;
+    pointer-events: all;
+}
+
+.note:hover:before {
+    color: #4cd1ff;
+}
+
+.note:active:before {
+    border-bottom: solid 2px #c8e5fd;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+}
