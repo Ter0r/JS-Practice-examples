@@ -6,7 +6,7 @@ const PARAM_SEARCH: string = "query=";
 const PARAM_PAGE: string = "page=";
 const PARAM_HPP: string = "hitsPerPage=";
 
-const fetchSearchStories = async (searchTerm: string, page) =>
+const fetchSearchStories = async (searchTerm: string, page: number) =>
   await (await fetch(
     `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
   ))

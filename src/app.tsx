@@ -12,18 +12,18 @@ import { Button } from "./components/button";
 
 const DEFAULT_QUERY: string = "redux";
 
-
 export const App = () => {
-  const [{ cachedArticles }, dispatch] = useReducer(ArticleReducer, {
-    cachedArticles: []
-});
-
   const [articles, setArticles] = useState<IArticle[]>([]);
-  const [searchTerm, setSearchTerm] = useState(DEFAULT_QUERY);
   const [page, setPage]: [
     React.ComponentState,
     React.SetStateAction<React.ComponentState>
   ] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(DEFAULT_QUERY);
+
+  const [{ cachedArticles }, dispatch] = useReducer(ArticleReducer, {
+    cachedArticles: []
+  });
+
 
   useEffect(() => {
     fetchSearchStories(searchTerm, page).then(result =>
@@ -32,8 +32,8 @@ export const App = () => {
     addArticle(articles, searchTerm, page);
   }, [page]);
 
-  const addArticle =  (articles, searchTerm, page) => {
-     dispatch({
+  const addArticle = (articles, searchTerm, page) => {
+    dispatch({
       type: "add-article",
       payload: articles,
       searchKey: searchTerm,
@@ -51,8 +51,9 @@ export const App = () => {
   };
 
   const onSearchSubmit = event => {
-    fetchSearchStories(searchTerm, page)
-        .then(response => setArticles(response.hits));
+    fetchSearchStories(searchTerm, page).then(response =>
+      setArticles(response.hits)
+    );
     addArticle(articles, searchTerm, page);
     setSearchTerm("");
     event.preventDefault();
@@ -60,6 +61,7 @@ export const App = () => {
 
   return (
     <>
+      <pre>{JSON.stringify(cachedArticles)}</pre>
       <AppGlobalStyle />
       <div className="container">
         <div className="page">
@@ -82,9 +84,7 @@ export const App = () => {
         <span className="pageNumber">Page: {page}</span>
         {articles.length !== 0 && (
           <Button
-            onClick={() =>
-              fetchSearchStories(searchTerm, setPage(page + 1))
-            }
+            onClick={() => setPage(page + 1)}
             className="button button-more"
           >
             Show more stories
