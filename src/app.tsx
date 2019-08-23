@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {useEffect, useReducer, useState, useRef, Ref} from "react";
 
 import ArticleReducer from "./Reducers/article-reducer";
 import fetchSearchStories from "./api/get-articles";
@@ -11,31 +11,33 @@ import { IArticle } from "./model/ArticleItem";
 import { Button } from "./components/button";
 
 const DEFAULT_QUERY: string = "redux";
-
+const inputRef = React.createRef();
+export default inputRef;
 export const App = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
   const [page, setPage]: [
     React.ComponentState,
     React.SetStateAction<React.ComponentState>
   ] = useState(0);
-  const [searchTerm, setSearchTerm] = useState(DEFAULT_QUERY);
-
-  const [{ cachedArticles }, dispatch] = useReducer(ArticleReducer, {
-    cachedArticles: []
+  const [{ cachedArticles, searchKey }, dispatch] = useReducer(ArticleReducer, {
+    cachedArticles: [],
+    searchKey: ''
   });
 
-
   useEffect(() => {
-    fetchSearchStories(searchTerm, page).then(result =>
-      setArticles(result.hits)
-    );
-    addArticle(articles, searchTerm, page);
-  }, [page]);
+    fetchSearchStories(searchKey, page)
+      .then(result => {
+        setArticles(result.hits);
+        return result.hits;
+      })
+      .then(results => addArticle(results, searchKey, page));
+    // getHits().then(response => console.dir(response));
+  }, [page, searchKey]);
 
-  const addArticle = (articles, searchTerm, page) => {
+  const addArticle = (result, searchTerm, page) => {
     dispatch({
       type: "add-article",
-      payload: articles,
+      payload: result,
       searchKey: searchTerm,
       page: page
     });
@@ -46,28 +48,37 @@ export const App = () => {
   };
 
   const onSearchEngine = event => {
-    setSearchTerm(event.target.value);
+    addArticle([],event.target.value, page);
     setPage(0);
   };
 
   const onSearchSubmit = event => {
-    fetchSearchStories(searchTerm, page).then(response =>
-      setArticles(response.hits)
-    );
-    addArticle(articles, searchTerm, page);
-    setSearchTerm("");
+    fetchSearchStories(searchKey, page)
+      .then(response => {
+        setArticles(response.hits);
+        return response.hits;
+      })
+      .then(result => addArticle(result, searchKey, page));
+     // setSearchTerm("");
+    // let [heyaaah] = cachedArticles;
+    // let { wow } = heyaaah;
+    // console.dir(heyaaah[searchKey]);
+    // console.log(searchKey);
     event.preventDefault();
   };
 
+  // async function getHits() {
+  //   return await cachedArticles[searchTerm];
+  // }
   return (
     <>
-      <pre>{JSON.stringify(cachedArticles)}</pre>
+      <pre>{}</pre>
       <AppGlobalStyle />
       <div className="container">
         <div className="page">
           <div className="interactions">
             <Search
-              value={searchTerm}
+              ref={inputRef}
               onChange={onSearchEngine}
               onSubmit={onSearchSubmit}
               onClick={() => onSearchSubmit}
